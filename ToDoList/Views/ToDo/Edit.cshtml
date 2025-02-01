@@ -1,0 +1,29 @@
+﻿@model ToDoItem
+
+@{
+    ViewData["Title"] = "Edytuj wybrane zadanie";
+}
+
+<div class="container mt-4">
+    <h1 class="text-center">📝 Edycja zadania</h1>
+
+    <form asp-action="Edit" method="post">
+        <div class="mb-3">
+            <label asp-for="Title" class="form-label">Tytuł</label>
+            <input asp-for="Title" class="form-control" value="@Model.Title" disabled />
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Description" class="form-label">Opis</label>
+            <textarea asp-for="Description" class="form-control" value="@Model.Description"></textarea>
+        </div>
+
+        <div class="mb-3 form-check">
+            <input asp-for="IsCompleted" class="form-check-input" value="@Model.IsCompleted" />
+            <label asp-for="IsCompleted" class="form-check-label">Czy ukończone?</label>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Zapisz</button>
+        <a asp-action="Index" class="btn btn-secondary">Anuluj</a>
+    </form>
+</div>

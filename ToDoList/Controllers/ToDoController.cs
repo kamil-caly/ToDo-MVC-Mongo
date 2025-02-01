@@ -59,5 +59,26 @@ namespace ToDoList.Controllers
             }
             return Ok();
         }
+
+        public async Task<IActionResult> Edit(string Id)
+        {
+            var todo = await _repo.GetByIdAsync(Id);
+            if (todo == null)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+            return View(todo);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(ToDoItem todoItem)
+        {
+            if (ModelState.IsValid)
+            {
+                await _repo.UpdateAsync(todoItem.Id, todoItem);
+                return RedirectToAction(nameof(Index));
+            }
+            return View(todoItem);
+        }
     }
 }
