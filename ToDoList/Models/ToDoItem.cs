@@ -13,7 +13,7 @@ namespace ToDoList.Models
         public string Title { get; set; } = string.Empty;
 
         [BsonElement("description")]
-        public string Description { get; set; } = string.Empty;
+        public string? Description { get; set; }
 
         [BsonElement("isCompleted")]
         public bool IsCompleted { get; set; } = false;
