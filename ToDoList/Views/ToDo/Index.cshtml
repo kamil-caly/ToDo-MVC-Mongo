@@ -1,0 +1,67 @@
+﻿@model List<ToDoItem>
+
+@{
+    ViewData["Title"] = "To-Do List";
+}
+
+<div class="container mt-4">
+    <h1 class="text-center">📌 Moja lista zadań</h1>
+
+    <div class="text-center mt-4">
+        <a asp-action="Create" class="btn btn-success">➕ Dodaj nowe zadanie</a>
+    </div>
+
+    @if (Model.Any())
+    {
+        <table class="table table-striped mt-4">
+            <thead>
+                <tr>
+                    <th>Tytuł</th>
+                    <th>Opis</th>
+                    <th>Status</th>
+                    <th>Akcje</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    int idx = 1;
+                }
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@idx) @item.Title</td>
+                        <td>@item.Description</td>
+                        <td>
+                            @if (item.IsCompleted)
+                            {
+                                <span class="badge bg-success">✔ Ukończone</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-warning">⏳ W toku</span>
+                            }
+                        </td>
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-primary btn-sm">Edytuj</a>
+                            <button onclick="deleteTask('@item.Id')" class="btn btn-danger btn-sm">Usuń</button>
+                            <button onclick="toggleTask('@item.Id')"
+                               class="btn btn-secondary btn-sm"
+                               style="visibility: @(item.IsCompleted ? "hidden" : "visible")">
+                                Oznacz jako ukończone
+                            </button>
+                        </td>
+                    </tr>
+                    {
+                        idx++;
+                    }
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p class="text-muted text-center mt-4">Brak zadań do wykonania.</p>
+    }
+</div>
+
+<script src="~/js/todo.js"></script>
