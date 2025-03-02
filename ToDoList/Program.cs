@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using ToDoList.Infrastructure;
 using ToDoList.Models;
 using ToDoList.Repositories;
@@ -7,9 +8,13 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-// Konfiguracja MongoDB
+// Konfiguracja
+var mongoDBSettings = builder.Configuration.GetSection("MongoDbSettings").Get<MongoDbSettings>();
 builder.Services.Configure<MongoDbSettings>(builder.Configuration.GetSection("MongoDbSettings"));
-builder.Services.AddSingleton<MongoDbContext>();
+
+builder.Services.AddDbContext<MongoDbContext>(options =>
+options.UseMongoDB(mongoDBSettings?.ConnectionString ?? "", mongoDBSettings?.DatabaseName ?? ""));
+
 builder.Services.AddScoped<ToDoRepository>();
 
 var app = builder.Build();

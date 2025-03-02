@@ -1,21 +1,18 @@
 ﻿using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Bson;
+using MongoDB.EntityFrameworkCore;
 
 namespace ToDoList.Models
 {
+    [Collection("ToDoItem")]
     public class ToDoItem
     {
-        [BsonId]
-        [BsonRepresentation(BsonType.ObjectId)]
-        public string Id { get; set; } = string.Empty;
-
-        [BsonElement("title")]
+        public ObjectId Id { get; set; }
+      
         public string Title { get; set; } = string.Empty;
-
-        [BsonElement("description")]
+        
         public string? Description { get; set; }
 
-        [BsonElement("isCompleted")]
         public bool IsCompleted { get; set; } = false;
     }
 }

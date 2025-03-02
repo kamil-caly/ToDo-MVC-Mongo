@@ -1,19 +1,21 @@
-﻿using Microsoft.Extensions.Options;
-using MongoDB.Driver;
+﻿using Microsoft.EntityFrameworkCore;
+using MongoDB.EntityFrameworkCore.Extensions;
 using ToDoList.Models;
 
 namespace ToDoList.Infrastructure
 {
-    public class MongoDbContext
+    public class MongoDbContext : DbContext
     {
-        private readonly IMongoDatabase _database;
+        public DbSet<ToDoItem> toDoItems { get; set; }
 
-        public MongoDbContext(IOptions<MongoDbSettings> settings)
+        public MongoDbContext(DbContextOptions options): base(options)
         {
-            var client = new MongoClient(settings.Value.ConnectionString);
-            _database = client.GetDatabase(settings.Value.DatabaseName);
         }
 
-        public IMongoCollection<ToDoItem> ToDoItems => _database.GetCollection<ToDoItem>("ToDoItems");
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<ToDoItem>();
+        }
     }
 }

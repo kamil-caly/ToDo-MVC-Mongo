@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using MongoDB.Bson;
 using ToDoList.Models;
 using ToDoList.Repositories;
 
@@ -38,19 +39,19 @@ namespace ToDoList.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> Toggle(string Id)
+        public async Task<IActionResult> Toggle(ObjectId Id)
         {
             var todo = await _repo.GetByIdAsync(Id);
             if (todo != null && !todo.IsCompleted)
             {
                 todo.IsCompleted = true;
-                await _repo.UpdateAsync(Id, todo);
+                await _repo.UpdateAsync(todo);
             }
             return Ok();
         }
 
         [HttpDelete]
-        public async Task<IActionResult> Delete(string Id)
+        public async Task<IActionResult> Delete(ObjectId Id)
         {
             var todo = await _repo.GetByIdAsync(Id);
             if (todo != null)
@@ -60,7 +61,7 @@ namespace ToDoList.Controllers
             return Ok();
         }
 
-        public async Task<IActionResult> Edit(string Id)
+        public async Task<IActionResult> Edit(ObjectId Id)
         {
             var todo = await _repo.GetByIdAsync(Id);
             if (todo == null)
@@ -75,7 +76,7 @@ namespace ToDoList.Controllers
         {
             if (ModelState.IsValid)
             {
-                await _repo.UpdateAsync(todoItem.Id, todoItem);
+                await _repo.UpdateAsync(todoItem);
                 return RedirectToAction(nameof(Index));
             }
             return View(todoItem);
